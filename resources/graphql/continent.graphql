@@ -1,0 +1,10 @@
+query Continent($code: String) { 
+    continent(code: $code) {
+  	    code
+        name
+        countries {
+            code
+	        name
+        }
+	}
+}
