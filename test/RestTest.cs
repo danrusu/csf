@@ -17,14 +17,10 @@ namespace csf
         public void Test_Continents_GraphQL_RestSharpClient()
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
-            string email = "dan.rusu @rms.com";
-            string password = "wrongPassword";
-
+  
             Action login = () =>
             {
                 GraphqlRestSharpClient graphql = new GraphqlRestSharpClient(CONTINENTS_GRAPHQL_URL);
-
-                var loginVariables = new { email, password };
 
                 string responseBody = graphql.post(@"graphql\continents.graphql");
             };
