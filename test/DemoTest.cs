@@ -1,29 +1,46 @@
 using NUnit.Framework;
+using OpenQA.Selenium.Chrome;
+using System;
 using System.Diagnostics;
 
 namespace csf
 {
 
-    public class UnitTests2
+    [Category("UI")]
+    public class DemoTest
     {
+        ChromeDriver driver;
+
         [SetUp]
         public void BeforeEach()
         {
-            Debug.WriteLine("before each 2");
+            driver = new ChromeDriver(getWebDriversPath("drivers"));
         }
 
         [Test]
         [Ignore("skipped")]
-        public void Test2()
+        public void DemoSkipped()
         {
             Debug.WriteLine("test 2");
             Assert.Fail();
         }
 
+        [Test]  
+        public void UITest()
+        {
+            driver.Navigate().GoToUrl("http://www.danrusu.ro");    
+            // actions, asserts
+        }
+
+        private ChromeOptions getWebDriversPath(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         [TearDown]
         public void AfterEach()
         {
-            Debug.WriteLine("after each 2");
+            driver.Quit();
         }
     }
 }

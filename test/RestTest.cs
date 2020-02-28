@@ -8,54 +8,54 @@ using test.utils;
 
 namespace csf
 {
-    [TestFixture]
     [Category("API")]
     public class RestTest
     {
-        [SetUp]
-        public void BeforeEach()
-        {
-            Debug.WriteLine("before each 1");
-        }
 
         [Test]
-        public void TestContinentsGraphQL()
+        [Category("graphql")]
+        public void Test_Continents_GraphQL_RestSharpClient()
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
             string email = "dan.rusu @rms.com";
             string password = "wrongPassword";
 
-            Action login = () => {
-                GraphqlFlurlClient graphql = new GraphqlFlurlClient(CONTINENTS_GRAPHQL_URL);
+            Action login = () =>
+            {
+                GraphqlRestSharpClient graphql = new GraphqlRestSharpClient(CONTINENTS_GRAPHQL_URL);
 
                 var loginVariables = new { email, password };
-
-                string loginVariablesJson = JsonConvert.SerializeObject(loginVariables);
 
                 string responseBody = graphql.post(@"graphql\continents.graphql");
             };
 
+            // TimeUtils.getDuration usage demo 
             long duration = TimeUtils.getDuration(login);
         }
 
         [Test]
-        public void TestContinentEUGraphQL()
+        [Category("graphql")]
+        public void Test_ContinentEU_GraphQL_FlurlClient()
         {
+            const string EXPECTED_CONTINENT_NAME = "Europe";
+
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
             string code = "EU";
 
-            Action login = () => {
-                GraphqlFlurlClient graphql = new GraphqlFlurlClient(CONTINENTS_GRAPHQL_URL);
+            GraphqlFlurlClient graphql = new GraphqlFlurlClient(CONTINENTS_GRAPHQL_URL);
 
-                var continentVariables = new { code };
+            var continentVariables = new { code };
 
-                string continentVariablesJson = JsonConvert.SerializeObject(continentVariables);
+            string continentVariablesJson = JsonConvert.SerializeObject(continentVariables);
 
-                string responseBody = graphql.post(@"graphql\continent.graphql", continentVariablesJson);
-            };
+            string responseBody = graphql.post(@"graphql\continent.graphql", continentVariablesJson);
 
-            long duration = TimeUtils.getDuration(login);
-            Assert.Pass();
+            var definition = new { data = new { continent = new { name = "" } } };
+
+            var continentResponsePartial = JsonConvert.DeserializeAnonymousType(responseBody, definition);
+            Debug.WriteLine($"continentResponsePartial: {continentResponsePartial}");
+
+            Assert.AreEqual(EXPECTED_CONTINENT_NAME, continentResponsePartial.data.continent.name);
         }
 
         [Test]
@@ -97,10 +97,5 @@ namespace csf
             //Assert.AreEqual(EXPECTED_RESULT, calculateResponsePartial["result"]);
         }
 
-        [TearDown]
-        public void AfterEach()
-        {
-            Debug.WriteLine("after each 1");
-        }
     }
 }
