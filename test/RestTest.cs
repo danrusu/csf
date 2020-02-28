@@ -1,7 +1,10 @@
+using csf.main.models;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using test;
 using test.utils;
@@ -46,12 +49,33 @@ namespace csf
 
             string responseBody = graphql.post(@"graphql\continent.graphql", continentVariablesJson);
 
-            var definition = new { data = new { continent = new { name = "" } } };
+            var continentDefinition = new { data = new { continent = new { name = "" } } };
 
-            var continentResponsePartial = JsonConvert.DeserializeAnonymousType(responseBody, definition);
-            Debug.WriteLine($"continentResponsePartial: {continentResponsePartial}");
+            var continentObject = JsonConvert.DeserializeAnonymousType(responseBody, continentDefinition);
+            Debug.WriteLine($"continent: {continentObject}");
 
-            Assert.AreEqual(EXPECTED_CONTINENT_NAME, continentResponsePartial.data.continent.name);
+            Assert.AreEqual(EXPECTED_CONTINENT_NAME, continentObject.data.continent.name);
+
+            // countries array deserialization to IDictionary (or main.models.Country)
+            var countriesDefinition = new { 
+                data = new { 
+                    continent = new { 
+                        countries = new List<Country>()
+                        // countries = new List<IDictionary>() 
+                    }
+                } 
+            };
+
+            var countriesObject = JsonConvert.DeserializeAnonymousType(responseBody, countriesDefinition);
+            Debug.WriteLine($"countriesObject: {countriesObject}");
+            
+            List<Country> countries = countriesObject.data.continent.countries;
+            Debug.WriteLine($"countries: {String.Join(",", countries)}");
+
+            const string EXPECTED_FIRST_COUNTRY_NAME = "Andorra";
+            Assert.AreEqual(
+                EXPECTED_FIRST_COUNTRY_NAME,
+                countries[0].name);            
         }
 
         [Test]
