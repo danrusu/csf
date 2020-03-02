@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace csf.main.utils
 {
     class FileUtils
     {
-        public static string readResourceFileToString(string resourceFilePath)
+        public static string readResourceFileToString(string localResourcePath)
         {
-            return File.ReadAllText(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
-                + @"\resources\" + resourceFilePath);
+            return File.ReadAllText(getFullResourcePath(localResourcePath));
+        }
+
+        public static string getFullResourcePath(string localResourcePath)
+        {
+            return Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
+                + @"\resources\" + localResourcePath;
         }
     }
 }

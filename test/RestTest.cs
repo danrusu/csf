@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using test;
@@ -21,36 +20,33 @@ namespace csf
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
   
-            Action login = () =>
+            Action Login = () =>
             {
-                GraphqlRestSharpClient graphql = new GraphqlRestSharpClient(CONTINENTS_GRAPHQL_URL);
+                RestSharpRequest request = new RestSharpRequest(CONTINENTS_GRAPHQL_URL)
+                    .WithQueryFile(@"graphql\continents.graphql");
 
-                string responseBody = graphql.post(@"graphql\continents.graphql");
+                string responseBody = request.Post();
             };
 
             // TimeUtils.getDuration usage demo 
-            long duration = TimeUtils.getDuration(login);
+            long duration = TimeUtils.getDuration(Login);
         }
 
         [Test]
         [Category("graphql")]
         public void Test_ContinentEU_GraphQL_FlurlClient()
         {
-            const string EXPECTED_CONTINENT_NAME = "Europe";
-
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
-            string code = "EU";
+            const string EXPECTED_CONTINENT_NAME = "Europe";            
+            const string EUROPE_CODE = "EU";
 
-            GraphqlFlurlClient graphql = new GraphqlFlurlClient(CONTINENTS_GRAPHQL_URL);
+            FlurlRequest request = new FlurlRequest(CONTINENTS_GRAPHQL_URL)
+                .WithQueryFile(@"graphql\continent.graphql")
+                .WithVariables(new { code = EUROPE_CODE });                                       
 
-            var continentVariables = new { code };
-
-            string continentVariablesJson = JsonConvert.SerializeObject(continentVariables);
-
-            string responseBody = graphql.post(@"graphql\continent.graphql", continentVariablesJson);
+            string responseBody = request.Post();
 
             var continentDefinition = new { data = new { continent = new { name = "" } } };
-
             var continentObject = JsonConvert.DeserializeAnonymousType(responseBody, continentDefinition);
             Debug.WriteLine($"continent: {continentObject}");
 
@@ -116,6 +112,5 @@ namespace csf
             Assert.AreEqual(EXPECTED_RESULT, calculateResponsePartial.result);
             //Assert.AreEqual(EXPECTED_RESULT, calculateResponsePartial["result"]);
         }
-
     }
 }
