@@ -39,7 +39,7 @@ namespace csf
             List<string> continentNames = continents.Select(continent => continent.name).ToList();
             Debug.WriteLine($"continents names: {string.Join(", ", continentNames)}");
 
-            Assert.AreEqual(EXPECTED_CONTINENT_NAMES, continentNames);
+            Assert.AreEqual(EXPECTED_CONTINENT_NAMES, continentNames); // hard assert
         }
 
         [Test]
