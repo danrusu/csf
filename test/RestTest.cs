@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using test;
 using test.utils;
 
@@ -19,17 +21,25 @@ namespace csf
         public void Test_Continents_GraphQL_RestSharpClient()
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
-  
-            Action Login = () =>
-            {
-                RestSharpRequest request = new RestSharpRequest(CONTINENTS_GRAPHQL_URL)
-                    .WithQueryFile(@"graphql\continents.graphql");
-
-                string responseBody = request.Post();
+            List<string> EXPECTED_CONTINENT_NAMES = new List<string> { 
+                "Africa", "Antarctica", "Asia", "Europe", 
+                "North America", "Oceania", "South Americas" 
             };
 
-            // TimeUtils.getDuration usage demo 
-            long duration = TimeUtils.getDuration(Login);
+            RestSharpRequest request = new RestSharpRequest(CONTINENTS_GRAPHQL_URL)
+                .WithQueryFile(@"graphql\continents.graphql");
+
+            string responseBody = request.Post();
+            var definition = new { data = new { continents = new List<Continent>() } };
+            var continentsObj = JsonConvert.DeserializeAnonymousType(responseBody, definition);
+
+            List<Continent> continents = continentsObj.data.continents;
+            Debug.WriteLine($"continents:\n{string.Join("\n", continents)}");
+
+            List<string> continentNames = continents.Select(continent => continent.name).ToList();
+            Debug.WriteLine($"continents names: {string.Join(", ", continentNames)}");
+
+            Assert.AreEqual(EXPECTED_CONTINENT_NAMES, continentNames);
         }
 
         [Test]
@@ -37,12 +47,12 @@ namespace csf
         public void Test_ContinentEU_GraphQL_FlurlClient()
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
-            const string EXPECTED_CONTINENT_NAME = "Europe";            
+            const string EXPECTED_CONTINENT_NAME = "Europe";
             const string EUROPE_CODE = "EU";
 
             FlurlRequest request = new FlurlRequest(CONTINENTS_GRAPHQL_URL)
                 .WithQueryFile(@"graphql\continent.graphql")
-                .WithVariables(new { code = EUROPE_CODE });                                       
+                .WithVariables(new { code = EUROPE_CODE });
 
             string responseBody = request.Post();
 
@@ -53,25 +63,28 @@ namespace csf
             Assert.AreEqual(EXPECTED_CONTINENT_NAME, continentObject.data.continent.name);
 
             // countries array deserialization to IDictionary (or main.models.Country)
-            var countriesDefinition = new { 
-                data = new { 
-                    continent = new { 
+            var countriesDefinition = new
+            {
+                data = new
+                {
+                    continent = new
+                    {
                         countries = new List<Country>()
                         // countries = new List<IDictionary>() 
                     }
-                } 
+                }
             };
 
             var countriesObject = JsonConvert.DeserializeAnonymousType(responseBody, countriesDefinition);
             Debug.WriteLine($"countriesObject: {countriesObject}");
-            
+
             List<Country> countries = countriesObject.data.continent.countries;
             Debug.WriteLine($"countries: {String.Join(",", countries)}");
 
             const string EXPECTED_FIRST_COUNTRY_NAME = "Andorra";
             Assert.AreEqual(
                 EXPECTED_FIRST_COUNTRY_NAME,
-                countries[0].name);            
+                countries[0].name);
         }
 
         [Test]

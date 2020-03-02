@@ -20,8 +20,7 @@ namespace csf
         [Test]
         [Ignore("skipped")]
         public void DemoSkipped()
-        {
-            Debug.WriteLine("test 2");
+        {            
             Assert.Fail();
         }
 
