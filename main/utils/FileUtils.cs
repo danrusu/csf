@@ -12,8 +12,10 @@ namespace csf.main.utils
 
         public static string getFullResourcePath(string localResourcePath)
         {
-            return Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
-                + @"\resources\" + localResourcePath;
+            return Path.Join(
+                Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName,
+                "resources",
+                localResourcePath);
         }
     }
 }

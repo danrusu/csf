@@ -1,7 +1,6 @@
 using csf.main.utils;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
-using System.Diagnostics;
 
 namespace csf
 {
@@ -27,7 +26,7 @@ namespace csf
         [Test]  
         public void DemoTest()
         {
-            driver.Navigate().GoToUrl("http://www.danrusu.ro");    
+            driver.Navigate().GoToUrl("http://www.qatools.ro");    
             // actions, asserts
         }
 

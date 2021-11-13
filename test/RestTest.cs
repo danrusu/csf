@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -93,7 +92,7 @@ namespace csf
         {
             const string EXPECTED_RESULT = "25";
 
-            var client = new RestSharp.RestClient("http://danrusu.ro/api/");
+            var client = new RestSharp.RestClient("http://qatools.ro/api/");
 
             var request = new RestSharp.RestRequest("calculate.php")
                 .AddQueryParameter("firstNumber", "5")
