@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
-namespace test.utils
+namespace csf.main.utils
 {
     class TimeUtils
     {
-        public static long getDuration(DateTime startDate, DateTime endDate)
+        public static long GetDuration(DateTime startDate, DateTime endDate)
         {
             TimeSpan timeSpan = endDate - startDate;
             long duration = Convert.ToInt64(timeSpan.TotalMilliseconds);
@@ -16,7 +14,7 @@ namespace test.utils
             return duration;
         }
 
-        public static long getDuration(Action action)
+        public static long GetDuration(Action action)
         {
 
             DateTime startDate = DateTime.Now;
@@ -25,7 +23,7 @@ namespace test.utils
 
             DateTime endDate = DateTime.Now;
 
-            return getDuration(startDate, endDate);
+            return GetDuration(startDate, endDate);
         }
 
     }

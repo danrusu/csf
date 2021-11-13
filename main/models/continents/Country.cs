@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace csf.main.models
+﻿namespace csf.main.models
 {
     class Country
     {

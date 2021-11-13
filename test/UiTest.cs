@@ -2,7 +2,7 @@ using csf.main.utils;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
 
-namespace csf
+namespace csf.test
 {
 
     [Category("UI")]
@@ -18,13 +18,13 @@ namespace csf
 
         [Test]
         [Ignore("skipped")]
-        public void DemoSkipped()
+        public void UiDemoSkippedTest()
         {            
             Assert.Fail();
         }
 
-        [Test]  
-        public void DemoTest()
+        [Test]
+        public void UiDemoTest()
         {
             driver.Navigate().GoToUrl("http://www.qatools.ro");    
             // actions, asserts
