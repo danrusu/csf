@@ -5,6 +5,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using test;
 using test.utils;
@@ -17,6 +18,7 @@ namespace csf
 
         [Test]
         [Category("graphql")]
+        
         public void Test_Continents_GraphQL_RestSharpClient()
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
@@ -26,7 +28,7 @@ namespace csf
             };
 
             RestSharpRequest request = new RestSharpRequest(CONTINENTS_GRAPHQL_URL)
-                .WithQueryFile(@"graphql\continents.graphql");
+                .WithQueryFile(Path.Join("graphql", "continents.graphql"));
 
             string responseBody = request.Post();
             var definition = new { data = new { continents = new List<Continent>() } };
@@ -50,7 +52,7 @@ namespace csf
             const string EUROPE_CODE = "EU";
 
             FlurlRequest request = new FlurlRequest(CONTINENTS_GRAPHQL_URL)
-                .WithQueryFile(@"graphql\continent.graphql")
+                .WithQueryFile(Path.Join("graphql", "continent.graphql"))
                 .WithVariables(new { code = EUROPE_CODE });
 
             string responseBody = request.Post();
