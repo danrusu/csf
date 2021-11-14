@@ -26,31 +26,30 @@ namespace csf.test
             }
         }";
 
-
         [Test]
         [Category("sendung")]
         public void TestSendungInvalidResponse()
         {
-            var definition = new { data = new { sendung = new { id = "" } } };
-            var dataObj = JsonConvert.DeserializeAnonymousType(invalidResponse, definition);
-            var sendung = dataObj.data.sendung;
+            var responseModel = new { data = new { sendung = new { id = "", name = "" } } };
+            var response = JsonConvert.DeserializeAnonymousType(invalidResponse, responseModel);
+            var sendung = response.data.sendung;
             Debug.WriteLine($"sendung: {sendung}");
 
-            Assert.IsNull(sendung);
+            Assert.IsNotNull(sendung);
         }
 
         [Test]
         [Category("sendung")]
         public void TestSendungValidResponse()
         {
-            var definition = new { data = new { sendung = new { id = "", name = "" } } };
-            var dataObj = JsonConvert.DeserializeAnonymousType(validResponse, definition);
-            var sendung = dataObj.data.sendung;
+            var responseModel = new { data = new { sendung = new { id = "", name = "" } } };
+            var response = JsonConvert.DeserializeAnonymousType(validResponse, responseModel);
+            var sendung = response.data.sendung;
             Debug.WriteLine($"sendung: {sendung}");
 
-            new SoftAssert().Add(
-                () => Assert.AreEqual(111, Convert.ToInt32(sendung.id))).Add(
-                () => Assert.AreEqual("lettr", sendung.name)
+            SoftAssert.Of(
+                () => Assert.AreEqual(1111, Convert.ToInt32(sendung.id)),
+                () => Assert.AreEqual("letter", sendung.name)
             ).AssertAll();
         }
     }

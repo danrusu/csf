@@ -30,8 +30,8 @@ namespace csf.test
                 .WithQueryFile(Path.Join("graphql", "continents.graphql"));
 
             string responseBody = request.Post();
-            var definition = new { data = new { continents = new List<Continent>() } };
-            var continentsObj = JsonConvert.DeserializeAnonymousType(responseBody, definition);
+            var responseModel = new { data = new { continents = new List<Continent>() } };
+            var continentsObj = JsonConvert.DeserializeAnonymousType(responseBody, responseModel);
 
             List<Continent> continents = continentsObj.data.continents;
             Debug.WriteLine($"continents:\n{string.Join("\n", continents)}");
@@ -113,13 +113,13 @@ namespace csf.test
             Assert.AreEqual(EXPECTED_RESULT, calculateResponse.Result);
 
             // PARTIAL deserialization - use Anonymus type or IDictionary
-            var definition = new { result = "" };
-            Debug.WriteLine($"definition: {definition.GetType().Name}");
+            var responseModel = new { result = "" };
+            Debug.WriteLine($"definition: {responseModel.GetType().Name}");
 
             //IDictionary dictionary = new Dictionary<string, string>();
             //dictionary.Add("result", "");            
 
-            var calculateResponsePartial = JsonConvert.DeserializeAnonymousType(response.Content, definition);
+            var calculateResponsePartial = JsonConvert.DeserializeAnonymousType(response.Content, responseModel);
             //var calculateResponsePartial = JsonConvert.DeserializeAnonymousType(response.Content, dictionary);
             Debug.WriteLine($"partial response: {calculateResponsePartial}");
 

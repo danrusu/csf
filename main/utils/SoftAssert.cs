@@ -10,7 +10,7 @@ namespace csf.main.utils
         private readonly List<Action> _assertions;
         private readonly List<Exception> _exceptions;
 
-        public SoftAssert()
+        private SoftAssert()
         {
             _assertions = new List<Action>();
             _exceptions = new List<Exception>();
