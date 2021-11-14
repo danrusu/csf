@@ -21,9 +21,15 @@ namespace csf.test
         public void Test_Continents_GraphQL_RestSharpClient()
         {
             const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
-            List<string> EXPECTED_CONTINENT_NAMES = new List<string> { 
-                "Africa", "Antarctica", "Asia", "Europe", 
-                "North America", "Oceania", "South America" 
+            List<string> EXPECTED_CONTINENT_NAMES = new List<string>
+            {
+                "Africa",
+                "Antarctica",
+                "Asia",
+                "Europe",
+                "North America",
+                "Oceania",
+                "South America"
             };
 
             RestSharpRequest request = new RestSharpRequest(CONTINENTS_GRAPHQL_URL)
@@ -46,46 +52,45 @@ namespace csf.test
         [Category("graphql")]
         public void Test_ContinentEU_GraphQL_FlurlClient()
         {
-            Debug.WriteLine("aaaaa");
-            //const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
-            //const string EXPECTED_CONTINENT_NAME = "Europe";
-            //const string EUROPE_CODE = "EU";
+            const string CONTINENTS_GRAPHQL_URL = "https://countries.trevorblades.com/";
+            const string EXPECTED_CONTINENT_NAME = "Europe";
+            const string EUROPE_CODE = "EU";
+            const string EXPECTED_EUROPE_FIRST_COUNTRY_NAME = "Andorra";
 
-            //FlurlRequest request = new FlurlRequest(CONTINENTS_GRAPHQL_URL)
-            //    .WithQueryFile(Path.Join("graphql", "continent.graphql"))
-            //    .WithVariables(new { code = EUROPE_CODE });
+            FlurlRequest request = new FlurlRequest(CONTINENTS_GRAPHQL_URL)
+                .WithQueryFile(Path.Join("graphql", "continent.graphql"))
+                .WithVariables(new { code = EUROPE_CODE });
 
-            //string responseBody = request.Post();
+            string responseBody = request.Post();
 
-            //var continentDefinition = new { data = new { continent = new { name = "" } } };
-            //var continentObject = JsonConvert.DeserializeAnonymousType(responseBody, continentDefinition);
-            //Debug.WriteLine($"continent: {continentObject}");
+            var continentDefinition = new { data = new { continent = new { name = "" } } };
+            var continentObject = JsonConvert.DeserializeAnonymousType(responseBody, continentDefinition);
+            Debug.WriteLine($"continent: {continentObject}");
 
-            //Assert.AreEqual(EXPECTED_CONTINENT_NAME, continentObject.data.continent.name);
+            Assert.AreEqual(EXPECTED_CONTINENT_NAME, continentObject.data.continent.name);
 
-            //// countries array deserialization to IDictionary (or main.models.Country)
-            //var countriesDefinition = new
-            //{
-            //    data = new
-            //    {
-            //        continent = new
-            //        {
-            //            countries = new List<Country>()
-            //            // countries = new List<IDictionary>() 
-            //        }
-            //    }
-            //};
+            // countries array deserialization to IDictionary (or main.models.Country)
+            var countriesDefinition = new
+            {
+                data = new
+                {
+                    continent = new
+                    {
+                        countries = new List<Country>()
+                        // countries = new List<IDictionary>() 
+                    }
+                }
+            };
 
-            //var countriesObject = JsonConvert.DeserializeAnonymousType(responseBody, countriesDefinition);
-            //Debug.WriteLine($"countriesObject: {countriesObject}");
+            var countriesObject = JsonConvert.DeserializeAnonymousType(responseBody, countriesDefinition);
+            Debug.WriteLine($"countriesObject: {countriesObject}");
 
-            //List<Country> countries = countriesObject.data.continent.countries;
-            //Debug.WriteLine($"countries: {String.Join(",", countries)}");
+            List<Country> countries = countriesObject.data.continent.countries;
+            Debug.WriteLine($"countries: {string.Join(",", countries)}");
 
-            //const string EXPECTED_FIRST_COUNTRY_NAME = "Andorra";
-            //Assert.AreEqual(
-            //    EXPECTED_FIRST_COUNTRY_NAME,
-            //    countries[0].name);
+            Assert.AreEqual(
+                EXPECTED_EUROPE_FIRST_COUNTRY_NAME,
+                countries[0].name);
         }
 
         [Test]

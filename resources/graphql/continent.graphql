@@ -1,4 +1,4 @@
-query Continent($code: String) { 
+query Continent($code: ID!) { 
     continent(code: $code) {
   	    code
         name

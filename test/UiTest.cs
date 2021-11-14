@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using csf.main.utils;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
@@ -26,7 +27,7 @@ namespace csf.test
         [Test]
         public void UiDemoTest()
         {
-            driver.Navigate().GoToUrl("http://www.qatools.ro");    
+            driver.Navigate().GoToUrl("http://www.qatools.ro");
             // actions, asserts
         }
 
